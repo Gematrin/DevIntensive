@@ -85,7 +85,7 @@
                     android:id="@+id/phone_et"
                     android:hint="Мобильный телефон"
                     android:inputType="phone"
-                    android:text="88005553535"/>
+                    android:text="8(800)555-35-35"/>
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
         <ImageView
@@ -211,7 +211,7 @@
                     android:id="@+id/about_et"
                     android:hint="О себе"
                     android:inputType="textMultiLine"
-                    android:text="github.com/Gematrin/DevIntensive проверка test 123 3245453 dfhgddhsgfvhsgfd sdfs sdfsdfs sdfsdf edfgdfg"/>
+                    android:text="There are only two things worse then an empty canvas: death and taxes. "/>
                </android.support.design.widget.TextInputLayout>
         </LinearLayout></LinearLayout>
     </LinearLayout>
