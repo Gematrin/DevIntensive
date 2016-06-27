@@ -12,7 +12,6 @@
         android:id="@+id/prof_pic"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:background="@color/colorAccent"
         android:layout_marginTop="@dimen/spacing_normal_16"
         android:src="@drawable/av"/>
 

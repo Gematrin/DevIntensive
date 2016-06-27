@@ -1,6 +1,6 @@
 package com.softdesign.devintensive.ui.activities;
 
-import android.graphics.Bitmap;
+import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -28,14 +28,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     public static final String TAG = ConstantManager.TAG_PREFIX + "Main_Activity";
     private boolean mCurrentEditMode = false;
-
     private DataManager mDataManager;
     private Toolbar mToolbar;
     private DrawerLayout mNavigationDrawer;
     private FloatingActionButton mFab;
     private EditText mMobilePhone, mEmail, mVk, mRepo, mAbout;
     private List<EditText> mInfo;
-    private ImageView mProfilePicture;
+    private RoundedBitmapDrawable mRoundedBitmapDrawable;
+    private ImageView mNavigationDrawerProfilePicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +104,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause");
+        saveUserInfoValues();
     }
 
     @Override
@@ -151,6 +152,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void setupDrawer(){
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        mRoundedBitmapDrawable = getRoundedDrawable(R.drawable.av);
+        mNavigationDrawerProfilePicture = (ImageView)navigationView.getHeaderView(0).findViewById(R.id.prof_pic);
+        mNavigationDrawerProfilePicture.setImageDrawable(mRoundedBitmapDrawable);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener(){
             @Override
             public boolean onNavigationItemSelected(MenuItem item){
@@ -202,5 +206,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } else {
             super.onBackPressed();
         }
+    }
+
+    private RoundedBitmapDrawable getRoundedDrawable(int drawableId){
+        RoundedBitmapDrawable drawable;
+        Resources res = getResources();
+        drawable = RoundedBitmapDrawableFactory.create(res, BitmapFactory.decodeResource(res, drawableId));
+        drawable.setCircular(true);
+        return drawable;
     }
 }

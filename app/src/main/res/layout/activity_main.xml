@@ -65,7 +65,8 @@
                     android:layout_height="114dp"
                     android:paddingTop="@dimen/spacing_medial_24"
                     android:paddingBottom="@dimen/spacing_medial_24"
-                    android:background="@color/gray">
+                    android:background="@color/gray"
+                    app:layout_behavior="com.softdesign.devintensive.utils.UserStatsBehavior">
 
                     <LinearLayout
                         style="@style/userStatLayout"
