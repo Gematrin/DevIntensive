@@ -48,6 +48,63 @@
 
         </android.support.design.widget.AppBarLayout>
 
+        <!--User Stats-->
+        <LinearLayout
+            android:id="@+id/userstats"
+            android:layout_width="match_parent"
+            android:layout_height="114dp"
+            android:gravity="center_vertical"
+            android:background="@color/gray"
+            app:layout_behavior="com.softdesign.devintensive.utils.UserStatsBehavior">
+
+            <LinearLayout
+                style="@style/userStatLayout"
+                android:layout_weight="1">
+
+                <com.softdesign.devintensive.ui.view.TextView_Roboto
+                    style="@style/upperFieldScores"
+                    android:id="@+id/rating_et"
+                    android:text="14"/>
+
+                <com.softdesign.devintensive.ui.view.TextView_Roboto
+                    style="@style/upperFieldText"
+                    android:text="@string/rating_field_desc"/>
+            </LinearLayout>
+
+            <View style="@style/verticalSplitter"/>
+
+            <LinearLayout
+                style="@style/userStatLayout"
+                android:layout_weight="2">
+
+                <com.softdesign.devintensive.ui.view.TextView_Roboto
+                    style="@style/upperFieldScores"
+                    android:id="@+id/codelines_et"
+                    android:text="2191"/>
+
+                <com.softdesign.devintensive.ui.view.TextView_Roboto
+                    style="@style/upperFieldText"
+                    android:text="@string/codelines_field_desc"/>
+            </LinearLayout>
+
+            <View style="@style/verticalSplitter"/>
+
+            <LinearLayout
+                style="@style/userStatLayout"
+                android:layout_weight="1">
+
+                <com.softdesign.devintensive.ui.view.TextView_Roboto
+                    style="@style/upperFieldScores"
+                    android:id="@+id/projects_et"
+                    android:text="4"/>
+
+                <com.softdesign.devintensive.ui.view.TextView_Roboto
+                    style="@style/upperFieldText"
+                    android:text="@string/projects_field_desc"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -58,63 +115,6 @@
                 android:layout_height="match_parent"
                 tools:context=".ui.activities.MainActivity"
                 android:orientation="vertical">
-
-                <!--User Stats-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="114dp"
-                    android:paddingTop="@dimen/spacing_medial_24"
-                    android:paddingBottom="@dimen/spacing_medial_24"
-                    android:background="@color/gray"
-                    app:layout_behavior="com.softdesign.devintensive.utils.UserStatsBehavior">
-
-                    <LinearLayout
-                        style="@style/userStatLayout"
-                        android:layout_weight="1">
-
-                        <com.softdesign.devintensive.ui.view.TextView_Roboto
-                            style="@style/upperFieldScores"
-                            android:id="@+id/rating_et"
-                            android:text="14"/>
-
-                        <com.softdesign.devintensive.ui.view.TextView_Roboto
-                            style="@style/upperFieldText"
-                            android:text="@string/rating_field_desc"/>
-                    </LinearLayout>
-
-                    <View style="@style/verticalSplitter"/>
-
-                    <LinearLayout
-                        style="@style/userStatLayout"
-                        android:layout_weight="2">
-
-                        <com.softdesign.devintensive.ui.view.TextView_Roboto
-                            style="@style/upperFieldScores"
-                            android:id="@+id/codelines_et"
-                            android:text="2191"/>
-
-                        <com.softdesign.devintensive.ui.view.TextView_Roboto
-                            style="@style/upperFieldText"
-                            android:text="@string/codelines_field_desc"/>
-                    </LinearLayout>
-
-                    <View style="@style/verticalSplitter"/>
-
-                    <LinearLayout
-                        style="@style/userStatLayout"
-                        android:layout_weight="1">
-
-                        <com.softdesign.devintensive.ui.view.TextView_Roboto
-                            style="@style/upperFieldScores"
-                            android:id="@+id/projects_et"
-                            android:text="4"/>
-
-                        <com.softdesign.devintensive.ui.view.TextView_Roboto
-                            style="@style/upperFieldText"
-                            android:text="@string/projects_field_desc"/>
-
-                    </LinearLayout>
-                </LinearLayout>
 
                 <!--Mobile-->
                 <LinearLayout style="@style/userInfoBackground">

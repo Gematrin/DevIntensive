@@ -72,12 +72,13 @@
     <!--Vertical splitter-->
     <style name="verticalSplitter">
         <item name="android:layout_width">@dimen/line_size</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">66dp</item>
         <item name="android:background">@color/gray_light</item>
     </style>
 
     <!--User stat layout-->
     <style name="userStatLayout">
+        <item name="android:gravity">center_vertical</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>
