@@ -52,7 +52,9 @@
         <LinearLayout
             android:id="@+id/userstats"
             android:layout_width="match_parent"
-            android:layout_height="114dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/spacing_medial_24"
+            android:paddingBottom="@dimen/spacing_medial_24"
             android:gravity="center_vertical"
             android:background="@color/gray"
             app:layout_behavior="com.softdesign.devintensive.utils.UserStatsBehavior">
@@ -106,6 +108,7 @@
         </LinearLayout>
 
         <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nestedview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">

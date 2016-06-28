@@ -12,7 +12,9 @@ public class PreferencesManager {
 
     private SharedPreferences mSharedPreferences;
 
-    private static final String[] USER_FIELDS = {ConstantManager.USER_PHONE_KEY, ConstantManager.USER_EMAIL_KEY, ConstantManager.USER_VK_KEY, ConstantManager.USER_REPO_KEY, ConstantManager.USER_ABOUT_KEY};
+    private static final String[] USER_FIELDS = {ConstantManager.USER_PHONE_KEY,
+            ConstantManager.USER_EMAIL_KEY, ConstantManager.USER_VK_KEY,
+            ConstantManager.USER_REPO_KEY, ConstantManager.USER_ABOUT_KEY};
 
     public PreferencesManager() {
         this.mSharedPreferences = DevintensiveApp.getSharedPreferences();

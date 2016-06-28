@@ -4,18 +4,17 @@ import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.LinearLayout;
 
 public class UserStatsBehavior extends CoordinatorLayout.Behavior<LinearLayout> {
 
-    private int mMaxHeight;
-    private int mDifference;
-    private boolean mValuesReceived = false;
-    private CoordinatorLayout.LayoutParams mLayoutParams;
+    private Context mContext;
 
     public UserStatsBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mContext = context;
     }
 
     @Override
@@ -25,16 +24,19 @@ public class UserStatsBehavior extends CoordinatorLayout.Behavior<LinearLayout> 
 
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, LinearLayout child, View dependency) {
-        if (!mValuesReceived) {
-            mMaxHeight = child.getHeight();
-            mDifference = mMaxHeight/7;
-            mLayoutParams = (CoordinatorLayout.LayoutParams)child.getLayoutParams();
-            mValuesReceived = true;
-        }
-        if (dependency.getY()-mDifference < mMaxHeight) mLayoutParams.height = (int)dependency.getY()-mDifference;
+        float position0 = dependency.getY();
+        float position1 = position0 - 50;
+        float ratio = (position1/position0 - 0.6874f)*4.6f;
+        int padding = (int)(getPixels(24)*ratio);
         child.setY(dependency.getY());
-        child.setLayoutParams(mLayoutParams);
+        child.setPadding(0, padding, 0, padding);
         dependency.setPadding(0, child.getHeight(), 0, 0);
         return true;
+        //это было ужасно
+    }
+
+    public int getPixels(int dp) {
+        DisplayMetrics displayMetrics = mContext.getResources().getDisplayMetrics();
+        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 }

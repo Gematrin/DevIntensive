@@ -3,7 +3,6 @@ package com.softdesign.devintensive.ui.activities;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -17,11 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
 import com.softdesign.devintensive.utils.ConstantManager;
-import com.softdesign.devintensive.utils.UserStatsBehavior;
 
 import java.util.ArrayList;
 import java.util.List;
