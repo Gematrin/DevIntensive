@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Рыбин Александр</string>
+
+    <!--Text field descriptions-->
+    <string name="mobile_field_desc">Мобильный телефон</string>
+    <string name="email_field_desc">E-mail</string>
+    <string name="vk_field_desc">Профиль в VK</string>
+    <string name="git_field_desc">Репозиторий</string>
+    <string name="about_field_desc">О себе</string>
+    <string name="rating_field_desc">Рейтинг</string>
+    <string name="codelines_field_desc">Написано строк кода</string>
+    <string name="projects_field_desc">Проектов</string>
+    <string name="my_profile">Мой профиль</string>
+    <string name="team">Команда</string>
 </resources>
