@@ -39,7 +39,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/profile_image_size"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/userphoto0"/>
+                        android:src="@drawable/userphoto0"
+                        tools:ignore="ContentDescription"/>
 
                     <RelativeLayout
                         android:id="@+id/profile_placeholder"
@@ -47,6 +48,7 @@
                         android:layout_height="match_parent"
                         android:background="@color/gray_background"
                         android:visibility="gone">
+
                         <com.softdesign.devintensive.ui.view.TextView_Roboto
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -55,6 +57,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_above="@+id/photo_placeholder"
                             android:layout_marginBottom="@dimen/spacing_small_8"/>
+
                         <ImageView
                             android:id="@+id/photo_placeholder"
                             android:layout_width="@dimen/placeholder_photo_size_90"
@@ -63,7 +66,8 @@
                             android:src="@drawable/add_a_photo_48px"
                             android:layout_centerHorizontal="true"
                             android:layout_alignParentBottom="true"
-                            android:layout_marginBottom="@dimen/spacing_large_56"/>
+                            android:layout_marginBottom="@dimen/spacing_large_56"
+                            tools:ignore="ContentDescription"/>
                     </RelativeLayout>
                 </FrameLayout>
 
@@ -73,7 +77,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:titleTextColor="@color/white"
-                    app:layout_collapseMode="pin"/>
+                    app:layout_collapseMode="pin"
+                    tools:ignore="UnusedAttribute" />
             </android.support.design.widget.CollapsingToolbarLayout>
 
         </android.support.design.widget.AppBarLayout>
@@ -96,7 +101,7 @@
                 <com.softdesign.devintensive.ui.view.TextView_Roboto
                     style="@style/upperFieldScores"
                     android:id="@+id/rating_et"
-                    android:text="14"/>
+                    android:text="@string/temporary_rating_14"/>
 
                 <com.softdesign.devintensive.ui.view.TextView_Roboto
                     style="@style/upperFieldText"
@@ -112,7 +117,7 @@
                 <com.softdesign.devintensive.ui.view.TextView_Roboto
                     style="@style/upperFieldScores"
                     android:id="@+id/codelines_et"
-                    android:text="2191"/>
+                    android:text="@string/temporary_code_lines_2191"/>
 
                 <com.softdesign.devintensive.ui.view.TextView_Roboto
                     style="@style/upperFieldText"
@@ -128,7 +133,7 @@
                 <com.softdesign.devintensive.ui.view.TextView_Roboto
                     style="@style/upperFieldScores"
                     android:id="@+id/projects_et"
-                    android:text="4"/>
+                    android:text="@string/temporary_projects_4"/>
 
                 <com.softdesign.devintensive.ui.view.TextView_Roboto
                     style="@style/upperFieldText"
@@ -146,16 +151,16 @@
             android:src="@drawable/ic_create_black_24dp"
             app:layout_anchor="@id/appbar_layout"
             app:layout_anchorGravity="bottom|right"
-            android:layout_marginRight="@dimen/fab_right_space"/>
+            android:layout_marginRight="@dimen/fab_right_space"
+            android:layout_marginEnd="@dimen/spacing_small_8"/>
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="left"
+        android:layout_gravity="start"
         app:headerLayout="@layout/drawer_header"
         app:menu="@menu/drawer_menu">
     </android.support.design.widget.NavigationView>
-
 </android.support.v4.widget.DrawerLayout>

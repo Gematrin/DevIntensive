@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView android:id="@+id/nestedview"
+<android.support.v4.widget.NestedScrollView
+    android:id="@+id/nestedview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -32,12 +33,13 @@
                         android:id="@+id/phone_et"
                         android:hint="@string/mobile_field_desc"
                         android:inputType="phone"
-                        android:text="8(800)555-35-35"/>
+                        android:text="@string/temporary_phone_number"/>
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
             <ImageView
                 style="@style/icon.right"
+                android:id="@+id/call_button"
                 android:src="@drawable/ic_phone_in_talk_black_24dp"/>
         </LinearLayout>
 
@@ -45,7 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/line_size"
             android:background="@color/gray_light"
-            android:layout_marginLeft="@dimen/spacing_larger_72"/>
+            android:layout_marginLeft="@dimen/spacing_larger_72"
+            android:layout_marginStart="@dimen/spacing_larger_72"/>
 
         <!--Email-->
         <LinearLayout style="@style/userInfoBackground">
@@ -66,18 +69,20 @@
                         android:id="@+id/email_et"
                         android:hint="@string/email_field_desc"
                         android:inputType="textEmailAddress"
-                        android:text="mail@hotmail.com"/>
+                        android:text="@string/temporary_email"/>
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
             <ImageView
                 style="@style/icon.right"
+                android:id="@+id/send_button"
                 android:src="@drawable/ic_send_black_24dp"/></LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/line_size"
             android:background="@color/gray_light"
-            android:layout_marginLeft="@dimen/spacing_larger_72"/>
+            android:layout_marginLeft="@dimen/spacing_larger_72"
+            android:layout_marginStart="@dimen/spacing_larger_72"/>
 
         <!-- VK-->
         <LinearLayout style="@style/userInfoBackground">
@@ -98,18 +103,20 @@
                         android:id="@+id/vk_et"
                         android:hint="@string/vk_field_desc"
                         android:inputType="textUri"
-                        android:text="vk.com/id61582684"/>
+                        android:text="@string/temporary_vk"/>
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
             <ImageView
                 style="@style/icon.right"
+                android:id="@+id/vk_button"
                 android:src="@drawable/ic_visibility_black_24dp"/></LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/line_size"
             android:background="@color/gray_light"
-            android:layout_marginLeft="@dimen/spacing_larger_72"/>
+            android:layout_marginLeft="@dimen/spacing_larger_72"
+            android:layout_marginStart="@dimen/spacing_larger_72"/>
 
         <!--Repo-->
         <LinearLayout style="@style/userInfoBackground">
@@ -130,18 +137,20 @@
                         android:id="@+id/repo_et"
                         android:hint="@string/git_field_desc"
                         android:inputType="textUri"
-                        android:text="github.com/Gematrin/DevIntensive"/>
+                        android:text="@string/temporary_repo"/>
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
             <ImageView
                 style="@style/icon.right"
+                android:id="@+id/repo_button"
                 android:src="@drawable/ic_visibility_black_24dp"/></LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/line_size"
             android:background="@color/gray_light"
-            android:layout_marginLeft="@dimen/spacing_larger_72"/>
+            android:layout_marginLeft="@dimen/spacing_larger_72"
+            android:layout_marginStart="@dimen/spacing_larger_72"/>
 
         <!--About-->
         <LinearLayout style="@style/userInfoBackground">
@@ -164,7 +173,7 @@
                         android:id="@+id/about_et"
                         android:hint="@string/about_field_desc"
                         android:inputType="textMultiLine"
-                        android:text="There are only two things worse than an empty canvas: death and taxes."/>
+                        android:text="@string/temporary_about"/>
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout></LinearLayout>
     </LinearLayout>
