@@ -40,6 +40,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
 import com.softdesign.devintensive.utils.ConstantManager;
@@ -86,6 +88,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private RoundedBitmapDrawable mRoundedBitmapDrawable;
     private ImageView mNavigationDrawerProfilePicture;
 
+    private AwesomeValidation mValidation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +97,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         Log.d(TAG, "onCreate");
 
         ButterKnife.bind(this);
+
+        mValidation = new AwesomeValidation(ValidationStyle.BASIC);
+
+        mValidation.addValidation(mMobilePhone, "\\+[\\d]{1,3} [(]{0,1}[\\d]{3}[)]{0,1} [\\d]{3}-[\\d]{2}-[\\d]{2}",
+                "Введите номер в формате +x xxx xxx-xx-xx");
+        mValidation.addValidation(mEmail, "[\\w]{3,}@[\\w]{3,}\\.[\\w]{2,3}", "Введите адрес в формате \"xxx@xxx.xx\"");
+        mValidation.addValidation(mVk, "vk.com/[\\w]{3,}", "Введите адрес в формате \"vk.com/xxx\"");
+        mValidation.addValidation(mRepo, "github.com/[\\w/]{3,}", "Введите адрес в формате \"github.com/xxx\"");
 
         mDataManager = DataManager.getInstance();
 
@@ -177,10 +189,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.floating_button:
                 if (mCurrentEditMode) {
                     changeEditMode(false);
-                    mCurrentEditMode = false;
                 } else {
                     changeEditMode(true);
-                    mCurrentEditMode = true;
                 }
                 break;
 
@@ -259,6 +269,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     //включает и отключает режим редактирования профиля
     private void changeEditMode(boolean mode) {
         if (mode) {
+            mCurrentEditMode = true;
             mFab.setImageResource(R.drawable.ic_done_black_24dp);
             for (EditText value : mInfo) {
                 value.setEnabled(true);
@@ -274,17 +285,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             imm.showSoftInput(mInfo.get(0), InputMethodManager.SHOW_IMPLICIT);
 
         } else {
-            mFab.setImageResource(R.drawable.ic_create_black_24dp);
-            for (EditText value : mInfo) {
-                value.setEnabled(false);
-                value.setFocusable(false);
-                value.setFocusableInTouchMode(false);
-            }
+            if (mValidation.validate()){
+                mValidation.clear();
+                mCurrentEditMode = false;
+                mFab.setImageResource(R.drawable.ic_create_black_24dp);
+                for (EditText value : mInfo) {
+                    value.setEnabled(false);
+                    value.setFocusable(false);
+                    value.setFocusableInTouchMode(false);
+                }
 
-            saveUserInfoValues();
-            hideProfilePlaceholder();
-            unlockToolbar();
-            mCollapsingToolbar.setExpandedTitleColor(getResources().getColor(R.color.white));
+                saveUserInfoValues();
+                hideProfilePlaceholder();
+                unlockToolbar();
+                mCollapsingToolbar.setExpandedTitleColor(getResources().getColor(R.color.white));
+            }
         }
     }
 
@@ -344,15 +359,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             if (mPhotoFile != null) {
                 takeCaptureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
                 startActivityForResult(takeCaptureIntent, ConstantManager.REQUEST_CAMERA_PICTURE);
-                // TODO: 04.07.2016 передать фотофайл в интент
             }
         } else {
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.CAMERA,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             }, ConstantManager.CAMERA_REQUEST_PERMISSION_CODE);
-            // TODO: 05.07.2016  повторный вызов метода
-            Snackbar.make(mCoordinatorLayout, "Для корректной работы приложения необходимо дать требуемые разрешения", Snackbar.LENGTH_LONG)
+
+            Snackbar.make(mCoordinatorLayout, "Для корректной работы необходимо дать требуемые разрешения", Snackbar.LENGTH_LONG)
                     .setAction("Разрешить", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -480,7 +494,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void openLink(String link){
         Intent openLinkIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://" + link));
         startActivityForResult(openLinkIntent, ConstantManager.OPEN_LINK_CODE);
-        // TODO: 06.07.2016 не возвращается в окно приложения по кнопке back
     }
 
     //запрос на отправку почты по адресу, переданному в метод
