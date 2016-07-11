@@ -29,13 +29,47 @@
                 app:contentScrim="@color/colorPrimary"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                <ImageView
-                    android:id="@+id/user_photo"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/profile_image_size"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/userphoto0"
-                    android:fitsSystemWindows="true"/>
+                    android:layout_height="wrap_content"
+                    android:fitsSystemWindows="true">
+
+                    <ImageView
+                        android:id="@+id/user_photo"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/profile_image_size"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/userphoto0"
+                        tools:ignore="ContentDescription"/>
+
+                    <RelativeLayout
+                        android:id="@+id/profile_placeholder"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/gray_background"
+                        android:visibility="gone">
+
+                        <com.softdesign.devintensive.ui.view.TextView_Roboto
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/user_profile.placeholder.image"
+                            android:textColor="@color/white"
+                            android:layout_centerHorizontal="true"
+                            android:layout_above="@+id/photo_placeholder"
+                            android:layout_marginBottom="@dimen/spacing_small_8"/>
+
+                        <ImageView
+                            android:id="@+id/photo_placeholder"
+                            android:layout_width="@dimen/placeholder_photo_size_90"
+                            android:layout_height="@dimen/placeholder_photo_size_90"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/add_a_photo_48px"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="@dimen/spacing_large_56"
+                            tools:ignore="ContentDescription"/>
+                    </RelativeLayout>
+                </FrameLayout>
 
                 <android.support.v7.widget.Toolbar
                     android:theme="@style/AppTheme.PopupOverlay"
@@ -43,7 +77,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:titleTextColor="@color/white"
-                    app:layout_collapseMode="pin"/>
+                    app:layout_collapseMode="pin"
+                    tools:ignore="UnusedAttribute" />
             </android.support.design.widget.CollapsingToolbarLayout>
 
         </android.support.design.widget.AppBarLayout>
@@ -66,7 +101,7 @@
                 <com.softdesign.devintensive.ui.view.TextView_Roboto
                     style="@style/upperFieldScores"
                     android:id="@+id/rating_et"
-                    android:text="14"/>
+                    android:text="@string/temporary_rating_14"/>
 
                 <com.softdesign.devintensive.ui.view.TextView_Roboto
                     style="@style/upperFieldText"
@@ -82,7 +117,7 @@
                 <com.softdesign.devintensive.ui.view.TextView_Roboto
                     style="@style/upperFieldScores"
                     android:id="@+id/codelines_et"
-                    android:text="2191"/>
+                    android:text="@string/temporary_code_lines_2191"/>
 
                 <com.softdesign.devintensive.ui.view.TextView_Roboto
                     style="@style/upperFieldText"
@@ -98,7 +133,7 @@
                 <com.softdesign.devintensive.ui.view.TextView_Roboto
                     style="@style/upperFieldScores"
                     android:id="@+id/projects_et"
-                    android:text="4"/>
+                    android:text="@string/temporary_projects_4"/>
 
                 <com.softdesign.devintensive.ui.view.TextView_Roboto
                     style="@style/upperFieldText"
@@ -107,174 +142,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <android.support.v4.widget.NestedScrollView
-            android:id="@+id/nestedview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context=".ui.activities.MainActivity"
-                android:orientation="vertical">
-
-                <!--Mobile-->
-                <LinearLayout style="@style/userInfoBackground">
-
-                    <ImageView
-                        style="@style/icon.left"
-                        android:src="@drawable/ic_call_black_24dp"/>
-
-                    <LinearLayout
-                        style="@style/inputField">
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <com.softdesign.devintensive.ui.view.EditText_Roboto
-                                style="@style/editText"
-                                android:id="@+id/phone_et"
-                                android:hint="@string/mobile_field_desc"
-                                android:inputType="phone"
-                                android:text="8(800)555-35-35"/>
-                        </android.support.design.widget.TextInputLayout>
-                    </LinearLayout>
-
-                    <ImageView
-                        style="@style/icon.right"
-                        android:src="@drawable/ic_phone_in_talk_black_24dp"/>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/line_size"
-                    android:background="@color/gray_light"
-                    android:layout_marginLeft="@dimen/spacing_larger_72"/>
-
-                <!--Email-->
-                <LinearLayout style="@style/userInfoBackground">
-
-                    <ImageView
-                        style="@style/icon.left"
-                        android:src="@drawable/ic_email_black_24dp"/>
-
-                    <LinearLayout
-                        style="@style/inputField">
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <com.softdesign.devintensive.ui.view.EditText_Roboto
-                                style="@style/editText"
-                                android:id="@+id/email_et"
-                                android:hint="@string/email_field_desc"
-                                android:inputType="textEmailAddress"
-                                android:text="mail@hotmail.com"/>
-                        </android.support.design.widget.TextInputLayout>
-                    </LinearLayout>
-
-                    <ImageView
-                        style="@style/icon.right"
-                        android:src="@drawable/ic_send_black_24dp"/></LinearLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/line_size"
-                    android:background="@color/gray_light"
-                    android:layout_marginLeft="@dimen/spacing_larger_72"/>
-
-                <!-- VK-->
-                <LinearLayout style="@style/userInfoBackground">
-
-                    <ImageView
-                        style="@style/icon.left"
-                        android:src="@drawable/vk_circle"/>
-
-                    <LinearLayout
-                        style="@style/inputField">
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <com.softdesign.devintensive.ui.view.EditText_Roboto
-                                style="@style/editText"
-                                android:id="@+id/vk_et"
-                                android:hint="@string/vk_field_desc"
-                                android:inputType="textUri"
-                                android:text="vk.com/id61582684"/>
-                        </android.support.design.widget.TextInputLayout>
-                    </LinearLayout>
-
-                    <ImageView
-                        style="@style/icon.right"
-                        android:src="@drawable/ic_visibility_black_24dp"/></LinearLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/line_size"
-                    android:background="@color/gray_light"
-                    android:layout_marginLeft="@dimen/spacing_larger_72"/>
-
-                <!--Repo-->
-                <LinearLayout style="@style/userInfoBackground">
-
-                    <ImageView
-                        style="@style/icon.left"
-                        android:src="@drawable/github_circle"/>
-
-                    <LinearLayout
-                        style="@style/inputField">
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <com.softdesign.devintensive.ui.view.EditText_Roboto
-                                style="@style/editText"
-                                android:id="@+id/repo_et"
-                                android:hint="@string/git_field_desc"
-                                android:inputType="textUri"
-                                android:text="github.com/Gematrin/DevIntensive"/>
-                        </android.support.design.widget.TextInputLayout>
-                    </LinearLayout>
-
-                    <ImageView
-                        style="@style/icon.right"
-                        android:src="@drawable/ic_visibility_black_24dp"/></LinearLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/line_size"
-                    android:background="@color/gray_light"
-                    android:layout_marginLeft="@dimen/spacing_larger_72"/>
-
-                <!--About-->
-                <LinearLayout style="@style/userInfoBackground">
-
-                    <ImageView
-                        style="@style/icon.left"
-                        android:src="@drawable/ic_account_circle_black_24dp"/>
-
-                    <LinearLayout
-                        style="@style/inputField"
-                        android:layout_height="wrap_content">
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="@dimen/spacing_normal_16">
-
-                            <com.softdesign.devintensive.ui.view.EditText_Roboto
-                                style="@style/editText"
-                                android:id="@+id/about_et"
-                                android:hint="@string/about_field_desc"
-                                android:inputType="textMultiLine"
-                                android:text="There are only two things worse than an empty canvas: death and taxes."/>
-                        </android.support.design.widget.TextInputLayout>
-                    </LinearLayout></LinearLayout>
-            </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
+        <include layout="@layout/user_profile_content"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/floating_button"
@@ -283,16 +151,16 @@
             android:src="@drawable/ic_create_black_24dp"
             app:layout_anchor="@id/appbar_layout"
             app:layout_anchorGravity="bottom|right"
-            android:layout_marginRight="@dimen/fab_right_space"/>
+            android:layout_marginRight="@dimen/fab_right_space"
+            android:layout_marginEnd="@dimen/spacing_small_8"/>
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="left"
+        android:layout_gravity="start"
         app:headerLayout="@layout/drawer_header"
         app:menu="@menu/drawer_menu">
     </android.support.design.widget.NavigationView>
-
 </android.support.v4.widget.DrawerLayout>
