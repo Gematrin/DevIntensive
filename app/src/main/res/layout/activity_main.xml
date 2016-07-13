@@ -87,12 +87,11 @@
         <LinearLayout
             android:id="@+id/userstats"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/spacing_medial_24"
-            android:paddingBottom="@dimen/spacing_medial_24"
+            android:layout_height="@dimen/user_info_size"
             android:gravity="center_vertical"
             android:background="@color/gray"
-            app:layout_behavior="com.softdesign.devintensive.utils.UserStatsBehavior">
+            app:layout_behavior=".ui.behaviors.UserStatsBehavior"
+            app:behavior_min_height="@dimen/size_medium_56">
 
             <LinearLayout
                 style="@style/userStatLayout"

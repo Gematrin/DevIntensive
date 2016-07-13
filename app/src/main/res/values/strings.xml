@@ -18,9 +18,13 @@
     <string name="user_profile.dialog.cancel">Отмена</string>
     <string name="user_profile.dialog.title">Изменить фотографию профиля</string>
     <string name="user_profile.choice.message">Выберите фото</string>
+
+    <!-- Login activity -->
     <string name="password">Пароль</string>
     <string name="sign_in">ВОЙТИ</string>
     <string name="forgot_password">Забыли пароль?</string>
+
+    <!--Temporary strings-->
     <string name="temporary_rating_14">14</string>
     <string name="temporary_code_lines_2191">2191</string>
     <string name="temporary_projects_4">4</string>
@@ -29,4 +33,5 @@
     <string name="temporary_vk">vk.com/id61582684</string>
     <string name="temporary_repo">github.com/Gematrin/DevIntensive</string>
     <string name="temporary_about">There are only two things worse than an empty canvas: death and taxes.</string>
+    <string name="remember_pass_url">http://devintensive.softdesign-apps.ru/forgotpass</string>
 </resources>
