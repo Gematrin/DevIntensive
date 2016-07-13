@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,8 +22,6 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -38,6 +34,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
@@ -80,12 +77,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.send_button) ImageView mSendButton;
     @BindView(R.id.vk_button) ImageView mVkButton;
     @BindView(R.id.repo_button) ImageView mRepoButton;
+    @BindView(R.id.rating_et) TextView mUserValueRating;
+    @BindView(R.id.codelines_et) TextView mUserValueCodelines;
+    @BindView(R.id.projects_et) TextView mUserValueProjects;
 
     private File mPhotoFile;
     private Uri mSelectedImage;
     private AppBarLayout.LayoutParams mAppBarParams;
     private List<EditText> mInfo;
-    private RoundedBitmapDrawable mRoundedBitmapDrawable;
+    private List<TextView> mUserValueViews;
     private ImageView mNavigationDrawerProfilePicture;
 
     private AwesomeValidation mValidation;
@@ -95,7 +95,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate");
-
         ButterKnife.bind(this);
 
         mValidation = new AwesomeValidation(ValidationStyle.BASIC);
@@ -107,6 +106,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mValidation.addValidation(mRepo, "github.com/[\\w/]{3,}", "Введите адрес в формате \"github.com/xxx\"");
 
         mDataManager = DataManager.getInstance();
+        setTitle(mDataManager.getPreferencesManager().loadName());
 
         mInfo = new ArrayList<>();
         mInfo.add(mMobilePhone);
@@ -114,6 +114,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mInfo.add(mVk);
         mInfo.add(mRepo);
         mInfo.add(mAbout);
+
+        mUserValueViews = new ArrayList<>();
+        mUserValueViews.add(mUserValueRating);
+        mUserValueViews.add(mUserValueCodelines);
+        mUserValueViews.add(mUserValueProjects);
 
         mFab.setOnClickListener(this);
         mProfilePlaceholder.setOnClickListener(this);
@@ -124,7 +129,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         setupToolbar();
         setupDrawer();
-        loadUserInfoValue();
+        initUserFields();
+        initUserInfoValues();
+
         Picasso.with(this)
                 .load(mDataManager.getPreferencesManager().loadUserPhoto())
                 .placeholder(R.drawable.userphoto0)
@@ -168,7 +175,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause");
-        saveUserInfoValues();
+        saveUserFields();
     }
 
     @Override
@@ -236,9 +243,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void setupDrawer() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        mRoundedBitmapDrawable = getRoundedDrawable(R.drawable.av);
         mNavigationDrawerProfilePicture = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.prof_pic);
-        mNavigationDrawerProfilePicture.setImageDrawable(mRoundedBitmapDrawable);
+        TextView drawerMail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_email_txt);
+        drawerMail.setText(mDataManager.getPreferencesManager().loadProfileData().get(1));
+        TextView drawerName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_name_txt);
+        drawerName.setText(mDataManager.getPreferencesManager().loadName());
+        Picasso.with(this)
+                .load(mDataManager.getPreferencesManager().loadAvatar())
+                .into(mNavigationDrawerProfilePicture);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -295,7 +307,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     value.setFocusableInTouchMode(false);
                 }
 
-                saveUserInfoValues();
+                saveUserFields();
                 hideProfilePlaceholder();
                 unlockToolbar();
                 mCollapsingToolbar.setExpandedTitleColor(getResources().getColor(R.color.white));
@@ -304,7 +316,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     //загружает сохраненную информацию профиля
-    private void loadUserInfoValue() {
+    private void initUserFields() {
         List<String> userData = mDataManager.getPreferencesManager().loadProfileData();
         for (int i = 0; i < userData.size(); i++) {
             mInfo.get(i).setText(userData.get(i));
@@ -312,7 +324,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     //сохраняет информацию профиля
-    private void saveUserInfoValues() {
+    private void saveUserFields() {
         List<String> userData = new ArrayList<>();
         for (EditText field : mInfo) {
             userData.add(field.getText().toString());
@@ -320,20 +332,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mDataManager.getPreferencesManager().saveProfileData(userData);
     }
 
+    private void initUserInfoValues(){
+        List<String> userData = mDataManager.getPreferencesManager().loadUserInfoValues();
+        for (int i = 0; i < userData.size(); i++){
+            mUserValueViews.get(i).setText(userData.get(i));
+        }
+    }
     @Override
     public void onBackPressed() {
         if (mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
             mNavigationDrawer.closeDrawer(GravityCompat.START);
         } else super.onBackPressed();
-    }
-
-    //принимает drawable по его id и возвращает скругленный drawable
-    private RoundedBitmapDrawable getRoundedDrawable(int drawableId) {
-        RoundedBitmapDrawable drawable;
-        Resources res = getResources();
-        drawable = RoundedBitmapDrawableFactory.create(res, BitmapFactory.decodeResource(res, drawableId));
-        drawable.setCircular(true);
-        return drawable;
     }
 
     //запрос фотографии для профиля из галереи
@@ -493,7 +502,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     //запрос на открытие ссылки, переданной в метод
     private void openLink(String link){
         Intent openLinkIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://" + link));
-        startActivityForResult(openLinkIntent, ConstantManager.OPEN_LINK_CODE);
+        startActivity(openLinkIntent);
     }
 
     //запрос на отправку почты по адресу, переданному в метод

@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="172dp"
+    android:layout_width="match_parent"
+    android:layout_height="172dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingTop="@dimen/spacing_medial_24"
     android:paddingRight="@dimen/spacing_normal_16"
     android:paddingLeft="@dimen/spacing_normal_16"
     android:paddingBottom="@dimen/spacing_small_8"
     android:background="@drawable/header_bg">
 
-    <ImageView
+    <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/prof_pic"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginTop="@dimen/spacing_normal_16"
+        app:riv_corner_radius="30dip"
+        android:scaleType="fitCenter"
+        app:riv_mutate_background="true"
         android:src="@drawable/av"/>
 
     <LinearLayout
