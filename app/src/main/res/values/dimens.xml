@@ -32,4 +32,6 @@
     <dimen name="fab_right_space">8dp</dimen>
     <dimen name="placeholder_photo_size_90">90dp</dimen>
     <dimen name="user_info_size">112dp</dimen>
+    <dimen name="font_medium_20">20sp</dimen>
+    <dimen name="font_large_24">24sp</dimen>
 </resources>

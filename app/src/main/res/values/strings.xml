@@ -34,4 +34,19 @@
     <string name="temporary_repo">github.com/Gematrin/DevIntensive</string>
     <string name="temporary_about">There are only two things worse than an empty canvas: death and taxes.</string>
     <string name="remember_pass_url">http://devintensive.softdesign-apps.ru/forgotpass</string>
+    <string name="no_data">Нет данных</string>
+    <string name="search_hint">Поиск по имени</string>
+    <string name="toast_camera_makefile_error">Ошибка при создании файла изображения</string>
+    <string name="camera_request_success">Разрешение на доступ к камере успешно получено</string>
+    <string name="write_request_success">Разрешение на запись файлов успешно получено</string>
+    <string name="no_mail_client_error">Ошибка: не найдено приложений для отправки почты</string>
+    <string name="permissions_request_description">Для корректной работы приложения необходимо дать требуемые разрешения</string>
+    <string name="allow">Разрешить</string>
+    <string name="wrong_username_or_pass">Неверный логин или пароль</string>
+    <string name="authorization_error">Ошибка авторизации</string>
+    <string name="no_correct_response_from_server">Сервер не вернул корректного ответа</string>
+    <string name="network_unavailable">Сеть недоступна</string>
+    <string name="open_profile">Просмотр</string>
+    <string name="getting_user_list_error">Ошибка при получении списка пользователей</string>
+    <string name="server_connection_failed">Ошибка при подключении к серверу</string>
 </resources>

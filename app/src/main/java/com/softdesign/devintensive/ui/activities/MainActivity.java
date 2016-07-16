@@ -87,6 +87,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private List<EditText> mInfo;
     private List<TextView> mUserValueViews;
     private ImageView mNavigationDrawerProfilePicture;
+    private NavigationView mNavigationView;
 
     private AwesomeValidation mValidation;
 
@@ -242,19 +243,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void setupDrawer() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        mNavigationDrawerProfilePicture = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.prof_pic);
-        TextView drawerMail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_email_txt);
+        mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+        mNavigationDrawerProfilePicture = (ImageView) mNavigationView.getHeaderView(0).findViewById(R.id.prof_pic);
+        TextView drawerMail = (TextView) mNavigationView.getHeaderView(0).findViewById(R.id.user_email_txt);
         drawerMail.setText(mDataManager.getPreferencesManager().loadProfileData().get(1));
-        TextView drawerName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_name_txt);
+        TextView drawerName = (TextView) mNavigationView.getHeaderView(0).findViewById(R.id.user_name_txt);
         drawerName.setText(mDataManager.getPreferencesManager().loadName());
         Picasso.with(this)
                 .load(mDataManager.getPreferencesManager().loadAvatar())
                 .into(mNavigationDrawerProfilePicture);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 item.setChecked(true);
+                switch (item.getItemId()){
+                    case R.id.user_profile_menu:
+                        break;
+
+                    case R.id.user_team_menu:
+                        Intent teamIntent = new Intent(getApplicationContext(), UserListActivity.class);
+                        startActivity(teamIntent);
+                        break;
+                }
                 mNavigationDrawer.closeDrawer(GravityCompat.START);
                 return false;
             }
@@ -362,7 +372,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 mPhotoFile = createImageFile();
             } catch (IOException e) {
                 e.printStackTrace();
-                // TODO: 04.07.2016 обработать ошибку
+                Toast.makeText(this, R.string.toast_camera_makefile_error, Toast.LENGTH_LONG).show();
             }
 
             if (mPhotoFile != null) {
@@ -375,8 +385,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             }, ConstantManager.CAMERA_REQUEST_PERMISSION_CODE);
 
-            Snackbar.make(mCoordinatorLayout, "Для корректной работы необходимо дать требуемые разрешения", Snackbar.LENGTH_LONG)
-                    .setAction("Разрешить", new View.OnClickListener() {
+            Snackbar.make(mCoordinatorLayout, R.string.permissions_request_description, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.allow, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             openAppSettings();
@@ -389,12 +399,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == ConstantManager.CAMERA_REQUEST_PERMISSION_CODE && grantResults.length == 2) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // TODO: 05.07.2016 обработать разрешение (разрешение получено), например вывести сообщение 
+                Toast.makeText(this, R.string.camera_request_success, Toast.LENGTH_LONG).show();
             }
 
             if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                // TODO: 05.07.2016 обработать разрешение
-            }
+                Toast.makeText(this, R.string.write_request_success, Toast.LENGTH_LONG).show();            }
         }
     }
 
@@ -487,8 +496,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         Intent makeCallIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, ConstantManager.CALL_REQUEST_PERMISSION_CODE);
-            Snackbar.make(mCoordinatorLayout, "Для корректной работы приложения необходимо дать требуемые разрешения", Snackbar.LENGTH_LONG)
-                    .setAction("Разрешить", new View.OnClickListener() {
+            Snackbar.make(mCoordinatorLayout, R.string.permissions_request_description, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.allow, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             openAppSettings();
@@ -515,7 +524,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (sendMailIntent.resolveActivity(getPackageManager()) != null){
             startActivityForResult(sendMailIntent, ConstantManager.SEND_MAIL_CODE);
         } else {
-            Toast.makeText(this, "Ошибка: не найдено приложений для отправки почты", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.no_mail_client_error, Toast.LENGTH_LONG).show();
         }
     }
 }

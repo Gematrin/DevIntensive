@@ -87,19 +87,19 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
                     if (response.code() == 200) {
                         loginSuccess(response.body());
                     } else if (response.code() == 403) {
-                        showSnackbar("Неверный логин или пароль");
+                        showSnackbar(getString(R.string.wrong_username_or_pass));
                     } else {
-                        showSnackbar("Ошибка авторизации");
+                        showSnackbar(getString(R.string.authorization_error));
                     }
                 }
 
                 @Override
                 public void onFailure(Call<UserModelRes> call, Throwable t) {
-                    // TODO: 12.07.2016 обработать ошибку ретрофита
+                    showSnackbar(getString(R.string.no_correct_response_from_server));
                 }
             });
         } else {
-            showSnackbar("Сеть недоступна");
+            showSnackbar(getString(R.string.network_unavailable));
         }
     }
 
