@@ -23,6 +23,8 @@ public interface ConstantManager {
     String LAST_NAME_KEY = "LAST_NAME_KEY";
     String FIRST_NAME_KEY = "FIRST_NAME_KEY";
 
+    String PARCELABLE_KEY = "PARCELABLE_KEY";
+
     int LOAD_PROFILE_PHOTO = 1;
     int REQUEST_CAMERA_PICTURE = 99;
     int REQUEST_GALLERY_PICTURE = 88;

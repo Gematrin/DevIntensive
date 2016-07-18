@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/user_coordinator_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar_layout"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/user_collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:contentScrim="@color/colorPrimary"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                    <ImageView
+                        android:id="@+id/user_profile_photo"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/profile_image_size"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/userphoto0"
+                        tools:ignore="ContentDescription"
+                        android:fitsSystemWindows="true"/>
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/user_profile_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:titleTextColor="@color/white"
+                    app:layout_collapseMode="pin"
+                    app:theme="@style/ToolbarStyle"
+                    app:popupTheme="@style/AppTheme.PopupOverlay"
+                    tools:ignore="UnusedAttribute" />
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <!--User Stats-->
+        <LinearLayout
+            android:id="@+id/userstats"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/user_info_size"
+            android:gravity="center_vertical"
+            android:background="@color/gray"
+            app:layout_behavior=".ui.behaviors.UserStatsBehavior"
+            app:behavior_min_height="@dimen/size_medium_56">
+
+            <LinearLayout
+                style="@style/userStatLayout"
+                android:layout_weight="1">
+
+                <com.softdesign.devintensive.ui.view.TextView_Roboto
+                    style="@style/upperFieldScores"
+                    android:id="@+id/user_rating_txt"
+                    android:text="@string/temporary_rating_14"/>
+
+                <com.softdesign.devintensive.ui.view.TextView_Roboto
+                    style="@style/upperFieldText"
+                    android:text="@string/rating_field_desc"/>
+            </LinearLayout>
+
+            <View style="@style/verticalSplitter"/>
+
+            <LinearLayout
+                style="@style/userStatLayout"
+                android:layout_weight="2">
+
+                <com.softdesign.devintensive.ui.view.TextView_Roboto
+                    style="@style/upperFieldScores"
+                    android:id="@+id/user_codelines_txt"
+                    android:text="@string/temporary_code_lines_2191"/>
+
+                <com.softdesign.devintensive.ui.view.TextView_Roboto
+                    style="@style/upperFieldText"
+                    android:text="@string/codelines_field_desc"/>
+            </LinearLayout>
+
+            <View style="@style/verticalSplitter"/>
+
+            <LinearLayout
+                style="@style/userStatLayout"
+                android:layout_weight="1">
+
+                <com.softdesign.devintensive.ui.view.TextView_Roboto
+                    style="@style/upperFieldScores"
+                    android:id="@+id/user_projects_txt"
+                    android:text="@string/temporary_projects_4"/>
+
+                <com.softdesign.devintensive.ui.view.TextView_Roboto
+                    style="@style/upperFieldText"
+                    android:text="@string/projects_field_desc"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <include layout="@layout/static_profile_content"/>
+
+    </android.support.design.widget.CoordinatorLayout>

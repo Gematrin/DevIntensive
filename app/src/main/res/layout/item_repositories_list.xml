@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/size_large_72">
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/spacing_larger_72"
+        android:layout_centerVertical="true">
+
+        <com.softdesign.devintensive.ui.view.EditText_Roboto
+            style="@style/editText"
+            android:id="@+id/repo_item_et"
+            android:hint="@string/git_field_desc"
+            android:inputType="textUri"
+            android:text="@string/temporary_repo"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageView
+        style="@style/icon.right"
+        android:src="@drawable/ic_visibility_black_24dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+</RelativeLayout>
