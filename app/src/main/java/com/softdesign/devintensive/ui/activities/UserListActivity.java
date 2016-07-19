@@ -10,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -29,7 +28,6 @@ import com.softdesign.devintensive.ui.adapters.UsersAdapter;
 import com.softdesign.devintensive.utils.ConstantManager;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -93,7 +91,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
     }
 
     private void loadUsers() {
-        Call<UserListRes> call = mDataManager.getUsersList();
+        Call<UserListRes> call = mDataManager.getUsersListFromNetwork();
 
         call.enqueue(new Callback<UserListRes>() {
             @Override
@@ -153,6 +151,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                 return false;
             }
         });
+        mNavigationView.getMenu().getItem(1).setChecked(true);
     }
 
     private void setupToolbar() {

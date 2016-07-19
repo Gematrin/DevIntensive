@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.design.widget.CoordinatorLayout;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +15,15 @@ import android.widget.Toast;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
 import com.softdesign.devintensive.data.network.req.UserLoginReq;
+import com.softdesign.devintensive.data.network.res.UserListRes;
 import com.softdesign.devintensive.data.network.res.UserModelRes;
+import com.softdesign.devintensive.data.storage.models.Repository;
+import com.softdesign.devintensive.data.storage.models.RepositoryDao;
+import com.softdesign.devintensive.data.storage.models.User;
+import com.softdesign.devintensive.data.storage.models.UserDTO;
+import com.softdesign.devintensive.data.storage.models.UserDao;
+import com.softdesign.devintensive.ui.adapters.UsersAdapter;
+import com.softdesign.devintensive.utils.ConstantManager;
 import com.softdesign.devintensive.utils.NetworkStatusChecker;
 
 import java.util.ArrayList;
@@ -35,6 +44,8 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.login_coordinator_container) CoordinatorLayout mCoordinatorLayout;
 
     private DataManager mDataManager;
+    private RepositoryDao mRepositoryDao;
+    private UserDao mUserDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +53,8 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.activity_auth);
         ButterKnife.bind(this);
         mDataManager = DataManager.getInstance();
+        mUserDao = mDataManager.getDaoSession().getUserDao();
+        mRepositoryDao = mDataManager.getDaoSession().getRepositoryDao();
 
         mRememberPassword.setOnClickListener(this);
         mSignIn.setOnClickListener(this);
@@ -126,5 +139,54 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
                 .getPublicInfo().getPhoto()));
         mDataManager.getPreferencesManager().saveAvatar(Uri.parse(userModel.getData().getUser()
                 .getPublicInfo().getAvatar()));
+    }
+
+    private void saveUserInDb(){
+        Call<UserListRes> call = mDataManager.getUsersListFromNetwork();
+
+        call.enqueue(new Callback<UserListRes>() {
+            @Override
+            public void onResponse(Call<UserListRes> call, Response<UserListRes> response) {
+
+                try {
+                if (response.code() == 200){
+                    List<Repository> allRepositories = new ArrayList<Repository>();
+                    List<User> allUsers = new ArrayList<User>();
+
+                    for (UserListRes.UserData userRes : response.body().getData()) {
+                        allRepositories.addAll(getRepoListFromUserRes(userRes));
+                        allUsers.add(new User(userRes));
+                    }
+
+                    mRepositoryDao.insertOrReplaceInTx(allRepositories);
+                    mUserDao.insertOrReplaceInTx(allUsers);
+
+                } else {
+                    showSnackbar("Список пользователей не может быть получен");
+                    Log.e(TAG, "onResponse: " + String.valueOf(response.errorBody().source()));
+                }
+
+                } catch (NullPointerException e){
+                    Log.e(TAG, e.toString());
+                    showSnackbar(getString(R.string.getting_user_list_error));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserListRes> call, Throwable t) {
+                showSnackbar(getString(R.string.server_connection_failed));
+            }
+        });
+    }
+
+    private List<Repository> getRepoListFromUserRes(UserListRes.UserData userData) {
+        final String userId = userData.getId();
+
+        List<Repository> repositories = new ArrayList<>();
+        for (UserModelRes.Repo repositoryRes : userData.getRepositories().getRepo()){
+            repositories.add(new Repository(repositoryRes, userId));
+        }
+
+        return repositories;
     }
 }
