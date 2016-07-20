@@ -34,4 +34,5 @@ public interface ConstantManager {
 
     int MAKE_CALL_CODE = 201;
     int SEND_MAIL_CODE = 203;
+    int SEARCH_DELAY = 1500;
 }

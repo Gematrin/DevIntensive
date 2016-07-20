@@ -26,6 +26,7 @@ public class Repository {
     public Repository(UserModelRes.Repo repositoryRes, String userId) {
         this.repositoryName = repositoryRes.getGit();
         this.userRemoteId = userId;
+        this.remoteId = repositoryRes.getId();
     }
 
     /**

@@ -35,7 +35,7 @@
     <string name="temporary_about">There are only two things worse than an empty canvas: death and taxes.</string>
     <string name="remember_pass_url">http://devintensive.softdesign-apps.ru/forgotpass</string>
     <string name="no_data">Нет данных</string>
-    <string name="search_hint">Поиск по имени</string>
+    <string name="search_hint">Поиск пользователя</string>
     <string name="toast_camera_makefile_error">Ошибка при создании файла изображения</string>
     <string name="camera_request_success">Разрешение на доступ к камере успешно получено</string>
     <string name="write_request_success">Разрешение на запись файлов успешно получено</string>
@@ -49,4 +49,6 @@
     <string name="open_profile">Просмотр</string>
     <string name="getting_user_list_error">Ошибка при получении списка пользователей</string>
     <string name="server_connection_failed">Ошибка при подключении к серверу</string>
+    <string name="cant_get_user_list">Список пользователей не может быть загружен</string>
+    <string name="enter_user_name">Введите имя пользователя</string>
 </resources>
