@@ -6,6 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/spacing_larger_72"
+        android:layout_marginEnd="@dimen/spacing_larger_72"
         android:layout_centerVertical="true">
 
         <com.softdesign.devintensive.ui.view.EditText_Roboto

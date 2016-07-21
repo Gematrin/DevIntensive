@@ -164,6 +164,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
+        mNavigationView.getMenu().getItem(0).setChecked(true);
     }
 
     @Override

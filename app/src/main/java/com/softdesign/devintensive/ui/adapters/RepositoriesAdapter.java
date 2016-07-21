@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.softdesign.devintensive.R;
+import com.softdesign.devintensive.ui.view.EditText_Roboto;
 
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class RepositoriesAdapter extends BaseAdapter {
             itemView = mInflater.inflate(R.layout.item_repositories_list, parent, false);
         }
         // TODO: 16.07.2016 показывает только один репозиторий - исправить
-        TextView repoName = (TextView) itemView.findViewById(R.id.repo_item_et);
+        EditText_Roboto repoName = (EditText_Roboto) itemView.findViewById(R.id.repo_item_et);
         repoName.setText(mRepoList.get(position));
         return itemView;
     }

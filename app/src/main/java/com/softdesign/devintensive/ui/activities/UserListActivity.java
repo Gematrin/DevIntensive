@@ -20,12 +20,14 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.redmadrobot.chronos.ChronosConnector;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
 import com.softdesign.devintensive.data.storage.models.User;
 import com.softdesign.devintensive.data.storage.models.UserDTO;
 import com.softdesign.devintensive.ui.adapters.UsersAdapter;
 import com.softdesign.devintensive.utils.ConstantManager;
+import com.softdesign.devintensive.utils.LoadUserFromDbOperation;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -49,6 +51,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
     private MenuItem mSearchItem;
     private String mQuery;
     private Handler mHandler;
+    private ChronosConnector mChronosConnector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +65,32 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
         mHandler = new Handler();
+        mChronosConnector = new ChronosConnector();
+        mChronosConnector.onCreate(this, savedInstanceState);
 
         setTitle(R.string.team);
         setupToolbar();
         setupDrawer();
         loadUsersFromDb();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mChronosConnector.onResume();
+        mNavigationView.getMenu().getItem(1).setChecked(true);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mChronosConnector.onPause();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mChronosConnector.onSaveInstanceState(outState);
     }
 
     @Override
@@ -95,11 +119,27 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
     }
 
     private void loadUsersFromDb() {
-        if (mDataManager.getUserListFromDb().size() == 0) {
-            showSnackbar(getString(R.string.cant_get_user_list));
+        try {
+            mChronosConnector.runOperation(new LoadUserFromDbOperation(), false);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+        //if (mDataManager.getUserListFromDb().size() == 0) {
+        //    showSnackbar(getString(R.string.cant_get_user_list));
 
-        } else {
-            showUsers(mDataManager.getUserListFromDb());
+        //} else {
+        //    showUsers(mDataManager.getUserListFromDb());
+        //}
+    }
+
+    public void onOperationFinished(final LoadUserFromDbOperation.Result result) {
+        if (result.isSuccessful()) {
+            mUsers = result.getOutput();
+            if (mUsers.size() == 0) {
+                showSnackbar(getString(R.string.cant_get_user_list));
+            } else {
+                showUsers(mUsers);
+            }
         }
     }
 
@@ -190,5 +230,11 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
         } else {
             mHandler.postDelayed(searchUsers, ConstantManager.SEARCH_DELAY);
         }
+    }
+    @Override
+    public void onBackPressed() {
+        if (mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
+            mNavigationDrawer.closeDrawer(GravityCompat.START);
+        } else super.onBackPressed();
     }
 }
