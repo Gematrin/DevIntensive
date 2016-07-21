@@ -1,6 +1,7 @@
 package com.softdesign.devintensive.ui.activities;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -10,33 +11,29 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+import android.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.redmadrobot.chronos.ChronosConnector;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
-import com.softdesign.devintensive.data.network.res.UserListRes;
+import com.softdesign.devintensive.data.storage.models.User;
 import com.softdesign.devintensive.data.storage.models.UserDTO;
 import com.softdesign.devintensive.ui.adapters.UsersAdapter;
 import com.softdesign.devintensive.utils.ConstantManager;
+import com.softdesign.devintensive.utils.LoadUserFromDbOperation;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class UserListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
@@ -50,7 +47,11 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
     private NavigationView mNavigationView;
     private DataManager mDataManager;
     private UsersAdapter mUsersAdapter;
-    private List<UserListRes.UserData> mUsers;
+    private List<User> mUsers;
+    private MenuItem mSearchItem;
+    private String mQuery;
+    private Handler mHandler;
+    private ChronosConnector mChronosConnector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,18 +63,43 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
+
+        mHandler = new Handler();
+        mChronosConnector = new ChronosConnector();
+        mChronosConnector.onCreate(this, savedInstanceState);
+
         setTitle(R.string.team);
         setupToolbar();
         setupDrawer();
-        loadUsers();
+        loadUsersFromDb();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mChronosConnector.onResume();
+        mNavigationView.getMenu().getItem(1).setChecked(true);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mChronosConnector.onPause();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mChronosConnector.onSaveInstanceState(outState);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_search, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        mSearchItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
+        searchView.setQueryHint(getString(R.string.enter_user_name));
         searchView.setOnQueryTextListener(this);
 
         return true;
@@ -92,38 +118,29 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
         Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
-    private void loadUsers() {
-        Call<UserListRes> call = mDataManager.getUsersList();
+    private void loadUsersFromDb() {
+        try {
+            mChronosConnector.runOperation(new LoadUserFromDbOperation(), false);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+        //if (mDataManager.getUserListFromDb().size() == 0) {
+        //    showSnackbar(getString(R.string.cant_get_user_list));
 
-        call.enqueue(new Callback<UserListRes>() {
-            @Override
-            public void onResponse(Call<UserListRes> call, Response<UserListRes> response) {
-                // TODO: 15.07.2016 обработать коды ответа
-                try {
-                    mUsers = response.body().getData();
-                    mUsersAdapter = new UsersAdapter(mUsers, new UsersAdapter.UserViewHolder.CustomClickListener(){
-                        @Override
-                        public void onUserItemClickListener(int position) {
-                            UserDTO userDTO = new UserDTO(mUsers.get(position));
+        //} else {
+        //    showUsers(mDataManager.getUserListFromDb());
+        //}
+    }
 
-                            Intent profileIntent = new Intent(UserListActivity.this, ProfileUserActivity.class);
-                            profileIntent.putExtra(ConstantManager.PARCELABLE_KEY, userDTO);
-
-                            startActivity(profileIntent);
-                        }
-                    });
-                    mRecyclerView.setAdapter(mUsersAdapter);
-                } catch (NullPointerException e){
-                    Log.e(TAG, e.toString());
-                    showSnackbar(getString(R.string.getting_user_list_error));
-                }
+    public void onOperationFinished(final LoadUserFromDbOperation.Result result) {
+        if (result.isSuccessful()) {
+            mUsers = result.getOutput();
+            if (mUsers.size() == 0) {
+                showSnackbar(getString(R.string.cant_get_user_list));
+            } else {
+                showUsers(mUsers);
             }
-
-            @Override
-            public void onFailure(Call<UserListRes> call, Throwable t) {
-                showSnackbar(getString(R.string.server_connection_failed));
-            }
-        });
+        }
     }
 
     private void setupDrawer() {
@@ -153,6 +170,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                 return false;
             }
         });
+        mNavigationView.getMenu().getItem(1).setChecked(true);
     }
 
     private void setupToolbar() {
@@ -173,6 +191,50 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        showUsersByQuery(newText);
         return false;
+    }
+
+    private void showUsers(List<User> users) {
+        mUsers = users;
+        mUsersAdapter = new UsersAdapter(mUsers, new UsersAdapter.UserViewHolder.CustomClickListener() {
+            @Override
+            public void onUserItemClickListener(int position) {
+                UserDTO userDTO = new UserDTO(mUsers.get(position));
+
+                Intent profileIntent = new Intent(UserListActivity.this, ProfileUserActivity.class);
+                profileIntent.putExtra(ConstantManager.PARCELABLE_KEY, userDTO);
+
+                startActivity(profileIntent);
+            }
+        });
+
+        mRecyclerView.swapAdapter(mUsersAdapter, false);
+    }
+
+    private void showUsersByQuery(String query) {
+        mQuery = query;
+
+        Runnable searchUsers = new Runnable() {
+            @Override
+            public void run() {
+                showUsers(mDataManager.getUserListByName(mQuery));
+            }
+        };
+
+        mHandler.removeCallbacks(searchUsers);
+
+
+        if (mQuery.isEmpty()){
+            mHandler.postDelayed(searchUsers, 0);
+        } else {
+            mHandler.postDelayed(searchUsers, ConstantManager.SEARCH_DELAY);
+        }
+    }
+    @Override
+    public void onBackPressed() {
+        if (mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
+            mNavigationDrawer.closeDrawer(GravityCompat.START);
+        } else super.onBackPressed();
     }
 }

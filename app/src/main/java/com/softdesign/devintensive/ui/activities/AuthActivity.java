@@ -5,21 +5,25 @@ import android.net.Uri;
 import android.support.design.widget.CoordinatorLayout;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.redmadrobot.chronos.ChronosConnector;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
 import com.softdesign.devintensive.data.network.req.UserLoginReq;
+import com.softdesign.devintensive.data.network.res.UserListRes;
 import com.softdesign.devintensive.data.network.res.UserModelRes;
+import com.softdesign.devintensive.data.storage.models.RepositoryDao;
+import com.softdesign.devintensive.data.storage.models.UserDao;
 import com.softdesign.devintensive.utils.NetworkStatusChecker;
+import com.softdesign.devintensive.utils.SaveUserInDbOperation;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -35,16 +39,41 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.login_coordinator_container) CoordinatorLayout mCoordinatorLayout;
 
     private DataManager mDataManager;
+    private RepositoryDao mRepositoryDao;
+    private UserDao mUserDao;
+    private ChronosConnector mChronosConnector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
         ButterKnife.bind(this);
+        mChronosConnector = new ChronosConnector();
+        mChronosConnector.onCreate(this, savedInstanceState);
         mDataManager = DataManager.getInstance();
+        mUserDao = mDataManager.getDaoSession().getUserDao();
+        mRepositoryDao = mDataManager.getDaoSession().getRepositoryDao();
 
         mRememberPassword.setOnClickListener(this);
         mSignIn.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mChronosConnector.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mChronosConnector.onResume();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mChronosConnector.onSaveInstanceState(outState);
     }
 
     @Override
@@ -72,10 +101,7 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
         mDataManager.getPreferencesManager().saveAuthToken(userModel.getData().getToken());
         mDataManager.getPreferencesManager().saveUserId(userModel.getData().getUser().getId());
         saveUserValues(userModel);
-
-        Intent loginIntent = new Intent(this, MainActivity.class);
-        startActivity(loginIntent);
-        this.finish();
+        saveUserInDb();
     }
 
     private void signIn(){
@@ -86,7 +112,7 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
                 public void onResponse(Call<UserModelRes> call, Response<UserModelRes> response) {
                     if (response.code() == 200) {
                         loginSuccess(response.body());
-                    } else if (response.code() == 403) {
+                    } else if (response.code() == 404) {
                         showSnackbar(getString(R.string.wrong_username_or_pass));
                     } else {
                         showSnackbar(getString(R.string.authorization_error));
@@ -126,5 +152,38 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
                 .getPublicInfo().getPhoto()));
         mDataManager.getPreferencesManager().saveAvatar(Uri.parse(userModel.getData().getUser()
                 .getPublicInfo().getAvatar()));
+    }
+
+    private void saveUserInDb(){
+        Call<UserListRes> call = mDataManager.getUsersListFromNetwork();
+
+        call.enqueue(new Callback<UserListRes>() {
+            @Override
+            public void onResponse(Call<UserListRes> call, Response<UserListRes> response) {
+
+
+                if (response.code() == 200){
+                    mChronosConnector.runOperation(new SaveUserInDbOperation(response.body(), mRepositoryDao, mUserDao), false);
+                } else {
+                    showSnackbar(getString(R.string.getting_user_list_error));
+                    Log.e(TAG, "onResponse: " + String.valueOf(response.errorBody().source()));
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<UserListRes> call, Throwable t) {
+                showSnackbar(getString(R.string.server_connection_failed));
+            }
+        });
+    }
+
+    public void onOperationFinished(final SaveUserInDbOperation.Result result) {
+        if (result.isSuccessful()) {
+            Intent loginIntent = new Intent(AuthActivity.this, MainActivity.class);
+            startActivity(loginIntent);
+            this.finish();
+        }
     }
 }

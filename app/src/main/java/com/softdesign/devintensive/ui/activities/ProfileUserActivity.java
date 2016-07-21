@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -84,7 +83,7 @@ public class ProfileUserActivity extends BaseActivity {
                     .load(userDto.getPhoto())
                     .placeholder(R.drawable.userphoto0)
                     .error(R.drawable.userphoto0)
-                    .resize(768, 512)
+                    .fit()
                     .centerCrop()
                     .into(mProfileImage);
         }else{
