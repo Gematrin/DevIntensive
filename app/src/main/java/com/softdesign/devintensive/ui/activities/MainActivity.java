@@ -164,6 +164,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
+        mNavigationView.getMenu().getItem(0).setChecked(true);
     }
 
     @Override
@@ -230,6 +231,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         outState.putBoolean(ConstantManager.EDIT_MODE_KEY, mCurrentEditMode);
     }
 
+    //устанавливает тулбар
     private void setupToolbar() {
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -242,6 +244,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
+
+    //устанавливает боковое меню
     private void setupDrawer() {
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         mNavigationDrawerProfilePicture = (ImageView) mNavigationView.getHeaderView(0).findViewById(R.id.prof_pic);
@@ -269,6 +273,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 return false;
             }
         });
+        mNavigationView.getMenu().getItem(0).setChecked(true);
     }
 
     @Override

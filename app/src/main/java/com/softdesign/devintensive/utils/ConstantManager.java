@@ -33,6 +33,6 @@ public interface ConstantManager {
     int CALL_REQUEST_PERMISSION_CODE = 103;
 
     int MAKE_CALL_CODE = 201;
-    int OPEN_LINK_CODE = 202;
     int SEND_MAIL_CODE = 203;
+    int SEARCH_DELAY = 1500;
 }
